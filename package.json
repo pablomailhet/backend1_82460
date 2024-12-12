@@ -1,0 +1,16 @@
+{
+  "name": "nodejs",
+  "version": "1.0.0",
+  "description": "BackendI",
+  "main": "src/app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "type": "module",
+  "author": "PM",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.21.1",
+    "luxon": "^3.5.0"
+  }
+}
