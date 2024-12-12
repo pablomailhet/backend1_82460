@@ -17,7 +17,7 @@ const productsRouter = Router();
 
 const getProducts = async () => {
     try {
-        const productsJson = await fs.promises.readFile("src/db/products.json", "utf-8");
+        const productsJson = await fs.promises.readFile("src/db/productos.json", "utf-8");
         return JSON.parse(productsJson);
     }
     catch (error) {
@@ -28,7 +28,7 @@ const getProducts = async () => {
 const saveProducts = async (products) => {
     try {
         const productsJson = JSON.stringify(products);
-        await fs.promises.writeFile("src/db/products.json", productsJson, "utf-8");
+        await fs.promises.writeFile("src/db/productos.json", productsJson, "utf-8");
         return true;
     }
     catch (error) {
