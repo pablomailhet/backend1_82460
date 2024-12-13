@@ -47,8 +47,8 @@ const verifyCart = (req, res, next) => {
         return res.status(400).send({ status: "error", message: "Products is required and must be an array" });
     }
 
-    const invalidProduct = cart.products.find(product => !Number.isInteger(product.id));
-    if (invalidProduct) {
+    const invalidProductId = cart.products.find(product => !Number.isInteger(product.id));
+    if (invalidProductId) {
         return res.status(400).send({ status: "error", message: "All product ids must be integers" });
     }
 
@@ -58,6 +58,11 @@ const verifyCart = (req, res, next) => {
         }
     });
 
+    const invalidProductQuantity = cart.products.find(product => product.quantity < 0);
+    if (invalidProductQuantity) {
+        return res.status(400).send({ status: "error", message: "All product quantity must be major 0" });
+    }
+
     next();
 
 }
@@ -65,7 +70,10 @@ const verifyCart = (req, res, next) => {
 cartsRouter.post("/", verifyCart, async (req, res) => {
     const carts = await getCarts();
     let cart = req.body;
-    cart.id = carts.length + 1;
+
+    const timestamp = new Date().getTime();
+    cart.id = timestamp;
+
     carts.push(cart);
     const isOk = await saveCarts(carts);
     if (!isOk) {
@@ -83,6 +91,11 @@ cartsRouter.post("/:cid/product/:pid", async (req, res) => {
         return res.status(400).send({ status: "error", message: "Invalid cart id" });
     }
 
+    const cart = carts.find(cart => cart.id === cid);
+    if (!cart) {
+        return res.status(404).send({ status: "error", message: "Cart not found" });
+    }
+
     if (!Number.isInteger(pid)) {
         return res.status(400).send({ status: "error", message: "Invalid product id" });
     }
@@ -92,12 +105,7 @@ cartsRouter.post("/:cid/product/:pid", async (req, res) => {
         return res.status(400).send({ status: "error", message: "Invalid quantity" });
     }
 
-    const cart = carts.find(cart => cart.id === cid);
-    if (!cart) {
-        return res.status(404).send({ status: "error", message: "Cart not found" });
-    }
-
-    const productIndex = cart.products.findIndex((prod) => prod.id === pid);
+    const productIndex = cart.products.findIndex(prod => prod.id === pid);
     if (productIndex < 0) {
         const product = {
             id: pid,
