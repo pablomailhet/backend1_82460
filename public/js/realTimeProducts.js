@@ -52,7 +52,6 @@ socket.on("newProduct", product => {
         </div>    
     `;
     ulProducts.appendChild(liProduct);
-    console.log(product);
 });
 
 socket.on("deletedProduct", id => {

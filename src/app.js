@@ -6,7 +6,7 @@ import productsRouter from "./routes/api/products.routers.js";
 import cartsRouter from "./routes/api/carts.routers.js";
 
 import viewsRouter from "./routes/views.routers.js";
-import { addProduct, deleteProduct } from "./routes/views.routers.js";
+import { addProduct, deleteProduct } from "./managers/managerProducts.js";
 
 const PORT = 8080;
 
@@ -54,7 +54,7 @@ io.on("connection", (socket) => {
             console.error(error);
             socket.emit("product_error", error.toString());
         }
-    })
+    });
 
     socket.on("disconnect", () => {
         console.log("Un cliente se ha desconectado");
