@@ -94,7 +94,7 @@ productsRouter.post("/", verifyProduct, async (req, res) => {
     if (!isOk) {
         return res.status(500).send({ status: "error", message: "Product could not add" });
     }
-    res.status(201).send({ status: "success", message: "Product added" });
+    res.status(201).send({ status: "success", message: "Product added", productId: product.id });
 
 });
 

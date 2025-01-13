@@ -1,0 +1,22 @@
+<div class="contenedor">
+
+    <h1>{{title}}</h1>
+
+    <ul id="ulProducts">
+        {{#each products}}
+        <li id="p{{this.id}}">
+            <div>
+                <h2 id="productTitle">{{this.title}}</h2>
+                <div>
+                    <p><strong>Descripción:</strong> <span id="productDescription">{{this.description}}</span></p>
+                    <p><strong>Código:</strong> <span id="productCode">{{this.code}}</span></p>
+                    <p><strong>Precio:</strong> $<span id="productPrice">{{this.price}}</span></p>
+                    <p><strong>Stock disponible:</strong> <span id="productStock">{{this.stock}}</span></p>
+                    <p><strong>Categoría:</strong> <span id="productCategory">{{this.category}}</span></p>
+                </div>
+            </div>
+        </li>
+        {{/each}}
+    </ul>
+
+</div>

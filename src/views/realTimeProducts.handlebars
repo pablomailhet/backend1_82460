@@ -1,0 +1,70 @@
+<div class="contenedor">
+
+    <div class="title">
+        <h1>{{title}}</h1>
+    </div>
+
+    <div class="contenedorProducts">
+        <ul id="ulProducts">
+            {{#each products}}
+            <li id="p{{this.id}}">
+                <div>
+                    <h2 id="productTitle">{{this.title}}</h2>
+                    <div>
+                        <p><strong>Descripción:</strong> <span id="productDescription">{{this.description}}</span></p>
+                        <p><strong>Código:</strong> <span id="productCode">{{this.code}}</span></p>
+                        <p><strong>Precio:</strong> $<span id="productPrice">{{this.price}}</span></p>
+                        <p><strong>Stock disponible:</strong> <span id="productStock">{{this.stock}}</span></p>
+                        <p><strong>Categoría:</strong> <span id="productCategory">{{this.category}}</span></p>
+                    </div>
+                    <button type="button" onclick="deleteProduct({{this.id}})">Delete</button>
+                </div>                
+            </li>
+            {{/each}}
+        </ul>
+
+    </div>
+
+    <div>
+        <h2 class="formTitle">Cargar un nuevo producto</h2>
+        <form id="formProduct">
+            <div>
+                <label for="title" class="">Title</label>
+                <input type="text" class="" id="title" required />
+            </div>
+            <div>
+                <label for="description" class="">Description</label>
+                <input type="text" class="" id="description" required />
+            </div>
+            <div>
+                <label for="code" class="">Code</label>
+                <input type="text" class="" id="code" required />
+            </div>
+            <div>
+                <label for="price" class="">Price</label>
+                <input type="number" class="" id="price" required step="any" />
+            </div>
+            <div>
+                <label for="stock" class="">stock</label>
+                <input type="number" class="" id="stock" required min="-1" max="1000"/>
+            </div>
+            <div>
+                <label for="category" class="">Category</label>
+                <select id="category" name="category">
+                    <option value="categoryA">Category A</option>
+                    <option value="categoryB">Category B</option>
+                    <option value="categoryC">Category C</option>
+                    <option value="categoryD">Category D</option>
+                    <option value="categoryE">Category E</option>
+                </select>
+            </div>
+            <div>
+                <button type="submit" class="">Enviar</button>
+            </div>
+        </form>
+    </div>
+
+</div>
+
+<script src="/socket.io/socket.io.js"></script>
+<script src="/js/realTimeProducts.js"></script>
