@@ -54,7 +54,7 @@ const deleteProduct = async (id) => {
     const res = await response.json();
     if (res.status !== "success") {
         throw new Error(res.message);
-    }    
+    }
 };
 
 export { getProducts, addProduct, deleteProduct };
