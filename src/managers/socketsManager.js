@@ -1,6 +1,6 @@
 import { addProduct, deleteProduct } from "./productsManager.js";
 
-const initSocket = (io) => {
+const initSockets = (io) => {
 
     io.on("connection", (socket) => {
 
@@ -36,4 +36,4 @@ const initSocket = (io) => {
 
 };
 
-export default initSocket;
+export default initSockets;
