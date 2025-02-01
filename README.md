@@ -4,29 +4,29 @@
 
 ### GET
 
-- Obtener todos los productos:
+- Obtener todos los productos
   ```
   GET http://localhost:8080/api/products
   ```
 
-- Obtener productos con límite de 2:
+- Obtener productos con límite de 2
   ```
   GET http://localhost:8080/api/products?limit=2
   ```
 
-- Obtener un producto específico por su ID (ejemplo: ID = 2):
+- Obtener un producto específico por su ID
   ```
   GET http://localhost:8080/api/products/pid
   ```
 
 ### POST
 
-- Crear un nuevo producto:
+- Crear un nuevo producto
   ```
   POST http://localhost:8080/api/products
   ```
 
-  Ejemplo de cuerpo de la solicitud:
+  Ejemplo de cuerpo de la solicitud
   ```json
   {
       "title": "Title 01",
@@ -39,7 +39,7 @@
   }
   ```
 
-  Otro ejemplo de cuerpo de la solicitud:
+  Otro ejemplo de cuerpo de la solicitud
   ```json
   {
       "title": "Title 02",
@@ -52,7 +52,7 @@
   }
   ```
 
-  Otro ejemplo de cuerpo de la solicitud:
+  Otro ejemplo de cuerpo de la solicitud
   ```json
   {
       "title": "Title 03",
@@ -67,12 +67,12 @@
 
 ### PUT
 
-- Actualizar un producto por su ID (ejemplo: ID = 3):
+- Actualizar un producto por su ID
   ```
   PUT http://localhost:8080/api/products/pid
   ```
 
-  Ejemplo de cuerpo de la solicitud:
+  Ejemplo de cuerpo de la solicitud
   ```json
   {
       "title": "Title 03_mod",
@@ -87,7 +87,7 @@
 
 ### DELETE
 
-- Eliminar un producto por su ID (ejemplo: ID = 3):
+- Eliminar un producto por su ID
   ```
   DELETE http://localhost:8080/api/products/pid
   ```
@@ -108,19 +108,19 @@
 
 ### POST
 
-- Crear un nuevo carrito vacío:
+- Crear un nuevo carrito vacío
   ```
   POST http://localhost:8080/api/carts
   ```
 
-  Ejemplo de cuerpo de la solicitud:
+  Ejemplo de cuerpo de la solicitud
   ```json
   {
       "products": []
   }
   ```
 
-  Otro ejemplo de cuerpo de la solicitud:
+  Otro ejemplo de cuerpo de la solicitud
   ```json
   {
       "products": [
@@ -131,7 +131,7 @@
   }
   ```
 
-  Otro ejemplo de cuerpo de la solicitud:
+  Otro ejemplo de cuerpo de la solicitud
   ```json
   {
       "products": [
@@ -144,19 +144,19 @@
 
 ### POST
 
-- Agregar un producto al carrito (ejemplo: carrito ID = 6797eef467633af608f624a4, producto ID = 679d90e5e6bc9c5bd6b69493):
+- Agregar un producto al carrito
   ```
   POST http://localhost:8080/api/carts/cid/product/pid
   ```
 
-  Ejemplo de cuerpo de la solicitud:
+  Ejemplo de cuerpo de la solicitud
   ```json
   {
       "quantity": 1
   }
   ```
 
-  Otro ejemplo de cuerpo de la solicitud:
+  Otro ejemplo de cuerpo de la solicitud
   ```json
   {
       "quantity": 2
@@ -170,7 +170,7 @@
   PUT http://localhost:8080/api/carts/cid
   ```
 
-  Ejemplo de cuerpo de la solicitud:
+  Ejemplo de cuerpo de la solicitud
   ```json
   {
         "products":[
@@ -187,7 +187,7 @@
   PUT http://localhost:8080/api/carts/cid/product/pid
   ```
 
-  Ejemplo de cuerpo de la solicitud:
+  Ejemplo de cuerpo de la solicitud
   ```json
   {
       "quantity": 2
