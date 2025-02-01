@@ -16,7 +16,7 @@
 
 - Obtener un producto específico por su ID (ejemplo: ID = 2):
   ```
-  GET http://localhost:8080/api/products/2
+  GET http://localhost:8080/api/products/pid
   ```
 
 ### POST
@@ -35,7 +35,7 @@
       "price": 11.11,
       "status": true,
       "stock": 1,
-      "category": "Category 01"
+      "category": "ESC"
   }
   ```
 
@@ -48,7 +48,7 @@
       "price": 22.22,
       "status": true,
       "stock": 2,
-      "category": "Category 02"
+      "category": "ESC"
   }
   ```
 
@@ -61,7 +61,7 @@
       "price": 33.33,
       "status": true,
       "stock": 3,
-      "category": "Category 03"
+      "category": "ESC"
   }
   ```
 
@@ -69,7 +69,7 @@
 
 - Actualizar un producto por su ID (ejemplo: ID = 3):
   ```
-  PUT http://localhost:8080/api/products/3
+  PUT http://localhost:8080/api/products/pid
   ```
 
   Ejemplo de cuerpo de la solicitud:
@@ -81,7 +81,7 @@
       "price": 333.33,
       "status": true,
       "stock": 33,
-      "category": "Category 03_mod"
+      "category": "ESC"
   }
   ```
 
@@ -89,10 +89,22 @@
 
 - Eliminar un producto por su ID (ejemplo: ID = 3):
   ```
-  DELETE http://localhost:8080/api/products/3
+  DELETE http://localhost:8080/api/products/pid
   ```
 
 ## Carts Routes
+
+### GET
+
+- Mostrar todos los carritos
+  ```
+  GET http://localhost:8080/api/carts
+  ```
+
+- Mostrar productos de un carrito
+  ```
+  GET http://localhost:8080/api/carts/cid
+  ```
 
 ### POST
 
@@ -112,9 +124,9 @@
   ```json
   {
       "products": [
-          {"id": 1},
-          {"id": 2},
-          {"id": 3}
+          {"product": "pid1"},
+          {"product": "pid2"},
+          {"product": "pid3"}
       ]
   }
   ```
@@ -123,18 +135,18 @@
   ```json
   {
       "products": [
-          {"id": 1, "quantity": 4},
-          {"id": 2, "quantity": 5},
-          {"id": 3, "quantity": 6}
+          {"product": "pid1", "quantity": 4},
+          {"product": "pid2", "quantity": 5},
+          {"product": "pid3", "quantity": 6}
       ]
   }
   ```
 
 ### POST
 
-- Agregar un producto al carrito (ejemplo: carrito ID = 1, producto ID = 1):
+- Agregar un producto al carrito (ejemplo: carrito ID = 6797eef467633af608f624a4, producto ID = 679d90e5e6bc9c5bd6b69493):
   ```
-  POST http://localhost:8080/api/carts/1/product/1
+  POST http://localhost:8080/api/carts/cid/product/pid
   ```
 
   Ejemplo de cuerpo de la solicitud:
@@ -149,4 +161,47 @@
   {
       "quantity": 2
   }
+  ```
+
+### PUT
+
+- Actualizar el carrito
+  ```
+  PUT http://localhost:8080/api/carts/cid
+  ```
+
+  Ejemplo de cuerpo de la solicitud:
+  ```json
+  {
+        "products":[
+            {"product":"pid1","quantity":3},
+            {"product":"pid2","quantity":5}
+        ]
+  }
+  ```
+
+### PUT
+
+- Actualizar la cantidad de un producto en el carrito
+  ```
+  PUT http://localhost:8080/api/carts/cid/product/pid
+  ```
+
+  Ejemplo de cuerpo de la solicitud:
+  ```json
+  {
+      "quantity": 2
+  }
+  ```
+
+### DELETE
+
+- Eliminar un producto del carrito
+  ```
+  DELETE http://localhost:8080/api/carts/cid/product/pid
+  ```
+
+- Vaciar el carrito
+  ```
+  DELETE http://localhost:8080/api/carts/cid
   ```
