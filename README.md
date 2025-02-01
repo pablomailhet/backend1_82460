@@ -1,5 +1,46 @@
 # API Documentation
 
+## Instalacion y ejecucion
+
+### Clonar repositorio
+
+- Obtener codigo fuente
+  ```
+  git clone https://github.com/pablomailhet/backend1_82460.git
+  ```
+
+- Acceder a la carpeta
+  ```
+  cd backend1_82460
+  ```
+
+- Instalar dependecias
+  ```
+  npm install
+  ```
+
+### Iniciar el servidor
+
+- Iniciar el servidor como dev
+  ```
+  npm run start:dev
+  ``
+
+- Acceder a vista productos
+  ```
+  http://localhost:8080/
+  ``
+
+- Acceder a vista carrito
+  ```
+  http://localhost:8080/carts/6797eef467633af608f624a4
+  ``
+
+- Acceder a vista Real time products
+  ```
+  http://localhost:8080/realTimeProducts
+  ``
+
 ## Products Routes
 
 ### GET
