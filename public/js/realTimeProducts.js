@@ -32,9 +32,9 @@ const deleteProduct = async (id) => {
     try {
         const result = await Swal.fire({
             icon: "question",
-            title: "¿Está seguro que desea eliminar el producto?",
+            title: "Are you sure you want to delete the product?",
             showCancelButton: true,
-            confirmButtonText: "Sí",
+            confirmButtonText: "Yes",
             cancelButtonText: "No",
             position: "center",
             customClass: {
