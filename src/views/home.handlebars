@@ -1,22 +1,80 @@
-<div class="contenedor">
-
-    <h1>{{title}}</h1>
-
-    <ul id="ulProducts">
-        {{#each products}}
-        <li id="p{{this.id}}">
-            <div>
-                <h2 id="productTitle">{{this.title}}</h2>
-                <div>
-                    <p><strong>Descripción:</strong> <span id="productDescription">{{this.description}}</span></p>
-                    <p><strong>Código:</strong> <span id="productCode">{{this.code}}</span></p>
-                    <p><strong>Precio:</strong> $<span id="productPrice">{{this.price}}</span></p>
-                    <p><strong>Stock disponible:</strong> <span id="productStock">{{this.stock}}</span></p>
-                    <p><strong>Categoría:</strong> <span id="productCategory">{{this.category}}</span></p>
+<main id="main" class="container mt-3" data-limit="{{data.limit}}" data-page="{{data.page}}" data-query="{{data.query}}"
+    data-sort="{{data.sort}}" data-prevPage="{{data.prevPage}}" data-nextPage="{{data.nextPage}}">
+    <section class="mt-3 d-flex justify-content-between align-items-center">
+        <h2>{{title}}</h2>
+        <a href="/carts/6797eef467633af608f624a4" class="btn btn-success">ir a Carts</a>
+    </section>
+    <section class="mt-3 d-flex justify-content-center align-items-center">
+        <div class="mx-3">
+            <h3>Filtro Category</h3>
+            <select id="filterCategory" class="form-select form-select-lg">
+                <option value="">All</option>
+                {{#each data.categories}}
+                <option value="{{this.value}}">{{this.title}}</option>
+                {{/each}}
+            </select>
+        </div>
+        <div class="mx-3">
+            <h3>Order Price</h3>
+            <select id="orderPrice" class="form-select form-select-lg">
+                <option value="">Sin orden</option>
+                <option value="asc">Ascendente</option>
+                <option value="desc">Descendente</option>
+            </select>
+        </div>
+    </section>
+    <section class="mt-3 mb-5">
+        <div class="row d-flex flex-row justify-content-center">
+            {{#each data.payload}}
+            <article class="card cardProducto">
+                <img src="{{this.thumbnails}}" class="card-img-top p-2">
+                <div class="card-body cardBodyProducto">
+                    <h3 class="card-title cardTitleProducto">{{this.title}}</h3>
+                    <p class="card-text cardTextProducto">{{this.description}}</p>
+                    <p class="card-text cardTextProducto">{{this.category}}</p>
+                    <p class="card-text cardTextProducto">${{formatDecimal this.price}}</p>
                 </div>
-            </div>
-        </li>
-        {{/each}}
-    </ul>
+                <div class="card-footer">
+                    <span class="m-1">Cantidad:</span>
+                    <input id="q_{{this.id}}" type="number" class="m-1 carritoInput" min="1" value="1" />
+                    <input type="button" class="btn btn-success m-1" value="Agregar"
+                        onclick="addProductToCart('{{this.id}}')" />
+                </div>
+            </article>
+            {{/each}}
+        </div>
+    </section>
 
-</div>
+    <section class="mt-3 d-flex justify-content-center align-items-center">
+        <div>
+            <select id="limitSelect" class="form-select form-select-lg" aria-label="Select limit">
+                <option value="1">Limit 1</option>
+                <option value="2">Limit 2</option>
+                <option value="3">Limit 3</option>
+                <option value="5">Limit 5</option>
+                <option value="10">Limit 10</option>
+            </select>
+        </div>
+    </section>
+
+    {{#isGreaterThanOne data.totalPages}}
+    <section class="mt-3 d-flex justify-content-center align-items-center">
+        <nav aria-label="Pagination" class="mx-2">
+            <ul class="pagination pagination-lg justify-content-center">
+                <li class="page-item {{#if data.hasPrevPage}} {{else}}disabled{{/if}}">
+                    <a class="page-link" href="{{data.prevLink}}">Previous</a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="#">{{data.page}}</a>
+                </li>
+                <li class="page-item {{#if data.hasNextPage}} {{else}}disabled{{/if}}">
+                    <a class="page-link" href="{{data.nextLink}}">Next</a>
+                </li>
+            </ul>
+        </nav>
+    </section>
+    {{/isGreaterThanOne}}
+
+    <script src="/js/home.js"></script>
+
+</main>

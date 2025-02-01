@@ -1,12 +1,17 @@
-const getProducts = async () => {
+const getProducts = async (req) => {
 
     try {
-        const response = await fetch('http://localhost:8080/api/products');
+
+        let { limit, page, query = "", sort = "" } = req.query;
+        limit = limit > 0 ? limit : 10;
+        page = page > 0 ? page : 1;
+
+        const response = await fetch(`http://localhost:8080/api/products?limit=${limit}&page=${page}&query=${query}&sort=${sort}`);
         if (!response.ok) {
             throw new Error('Error');
         }
         const data = await response.json();
-        return data.products;
+        return data;
     } catch (error) {
         return [];
     }
@@ -33,7 +38,7 @@ const addProduct = async (product) => {
         throw new Error(res.message);
     }
 
-    product.id = res.productId;
+    product._id = res.productId;
     return product;
 
 };

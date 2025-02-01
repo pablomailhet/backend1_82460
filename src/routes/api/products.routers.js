@@ -1,138 +1,134 @@
 import { Router } from "express";
-import fs from "fs";
+
+import productModel from "../../models/products.model.js";
 
 const productsRouter = Router();
 
-const getProducts = async () => {
-    try {
-        const productsJson = await fs.promises.readFile("src/db/productos.json", "utf-8");
-        return JSON.parse(productsJson);
-    }
-    catch (error) {
-        return [];
-    }
-}
+const categories = [
+    {value:"Motores Brushless",title:"Motores Brushless"},
+    {value:"ESC",title:"ESC"},
+    {value:"Propellers",title:"Propellers"},
+    {value:"Flight Controllers",title:"Flight Controllers"}
+];
 
-const saveProducts = async (products) => {
-    try {
-        const productsJson = JSON.stringify(products);
-        await fs.promises.writeFile("src/db/productos.json", productsJson, "utf-8");
-        return true;
+const buildPaginationResponse = (result,query,sort) => {
+    const paginationResponse = {
+        status: "success",
+        payload: result.docs,
+        totalPages: result.totalPages,
+        prevPage: result.prevPage,
+        nextPage: result.nextPage,
+        page: result.page,
+        hasPrevPage: result.hasPrevPage,
+        hasNextPage: result.hasNextPage,
+        prevLink: result.hasPrevPage ? `/?limit=${result.limit}&page=${result.prevPage}&query=${query}&sort=${sort}` : null,
+        nextLink: result.hasNextPage ? `/?limit=${result.limit}&page=${result.nextPage}&query=${query}&sort=${sort}` : null,
+        limit: result.limit, 
+        query,
+        sort,
+        categories
     }
-    catch (error) {
-        return false;
-    }
-}
+    return paginationResponse;
+};
 
 productsRouter.get("/", async (req, res) => {
-    const products = await getProducts();
-    const { limit } = req.query;
-    const limitValue = parseInt(limit);
-    if (limitValue > 0) {
-        const filtersProducts = products.slice(0, limitValue);
-        return res.send({ status: "success", products: filtersProducts });
+
+    try {
+
+        let { limit, page, query, sort } = req.query;
+        limit = limit > 0 ? limit : 10;
+        page = page > 0 ? page : 1;
+        const queryObject = query ? {category:query} : {};
+        let sortObject = {};
+        if(sort==="asc" || sort==="desc"){
+            sortObject = {price: sort==="asc" ? 1 : -1};
+        }
+        const options = { limit, page, sort:sortObject, lean: true };
+        const result = await productModel.paginate(queryObject, options);
+        res.send(buildPaginationResponse(result,query,sort));
+
     }
-    res.send({ status: "success", products });
+    catch (error) {
+        res.status(500).send({ status: "error", message: error.message });
+    }
+
 });
 
 productsRouter.get("/:pid", async (req, res) => {
-    const products = await getProducts();
-    const pid = parseInt(req.params.pid);
-    const product = products.find(prod => prod.id === pid);
-    if (!product) {
-        return res.status(404).send({ status: "error", message: "Product not found" });
+
+    try {
+        const { pid } = req.params;
+
+        const product = await productModel.findById(pid);
+
+        if (!product) {
+            return res.status(404).send({ status: "error", message: "Product not found" });
+        }
+
+        res.send({ status: 'success', product });
     }
-    res.send({ status: "success", product });
-});
-
-const verifyProduct = (req, res, next) => {
-    const { title, description, code, price, status, stock, category, thumbnails } = req.body;
-
-    if (!title || !description || !code || !price || !status || !stock || !category) {
-        return res.status(400).send({ status: "error", message: "Missing required fields." });
+    catch (error) {
+        res.status(500).send({ status: "error", message: error.message });
     }
-
-    if (typeof title !== "string" ||
-        typeof description !== "string" ||
-        typeof code !== "string" ||
-        typeof price !== "number" ||
-        typeof status !== "boolean" ||
-        typeof stock !== "number" ||
-        typeof category !== "string") {
-        return res.status(400).send({ status: "error", message: "Incomplete product or incorrect data types" });
-    }
-
-    if (price < 0) {
-        return res.status(400).send({ status: "error", message: "Price cannot be negative." });
-    }
-
-    if (stock < 0) {
-        return res.status(400).send({ status: "error", message: "Stock cannot be negative." });
-    }
-
-    next();
-
-}
-
-productsRouter.post("/", verifyProduct, async (req, res) => {
-    const products = await getProducts();
-    let product = req.body;
-
-    const timestamp = new Date().getTime();
-    product.id = timestamp;
-
-    if (!product.status) {
-        product.status = true;
-    }
-
-    if (!product.thumbnails || !Array.isArray(product.thumbnails)) {
-        product.thumbnails = [];
-    }
-
-    products.push(product);
-    const isOk = await saveProducts(products);
-    if (!isOk) {
-        return res.status(500).send({ status: "error", message: "Product could not add" });
-    }
-    res.status(201).send({ status: "success", message: "Product added", productId: product.id });
 
 });
 
-productsRouter.put("/:pid", verifyProduct, async (req, res) => {
-    const products = await getProducts();
-    const pid = parseInt(req.params.pid);
-    const productData = req.body;
-    const productIndex = products.findIndex(prod => prod.id === pid);
-    if (productIndex < 0) {
-        return res.status(404).send({ status: "error", message: "Product not found" });
+productsRouter.post("/", async (req, res) => {
+
+    try {
+        const { body } = req;
+
+        delete body._id;
+
+        const product = await productModel.create(body);
+        res.status(201).send({ status: "success", message: "Product added", productId: product._id });
     }
-    const product = {
-        ...productData,
-        id: pid
+    catch (error) {
+        res.status(500).send({ status: "error", message: error.message });
     }
-    products[productIndex] = product;
-    const isOk = await saveProducts(products);
-    if (!isOk) {
-        return res.status(500).send({ status: "error", message: "Product could not updated" });
+
+});
+
+productsRouter.put("/:pid", async (req, res) => {
+
+    try {
+        const { pid } = req.params;
+        const { body } = req;
+
+        delete body._id;
+
+        const product = await productModel.findByIdAndUpdate(pid, body, { new: true });
+
+        if (!product) {
+            return res.status(404).send({ status: "error", message: "Product not found" });
+        }
+
+        res.send({ status: 'success', message: 'Product updated', product });
+
     }
-    res.send({ status: 'success', message: 'Product updated' });
+    catch (error) {
+        res.status(500).send({ status: "error", message: error.message });
+    }
+
 });
 
 productsRouter.delete("/:pid", async (req, res) => {
-    const products = await getProducts();
-    const pid = parseInt(req.params.pid);
 
-    const productIndex = products.findIndex(prod => prod.id === pid);
-    if (productIndex < 0) {
-        return res.status(404).send({ status: "error", message: "Product not found" });
+    try {
+        const { pid } = req.params;
+
+        const product = await productModel.findByIdAndDelete(pid);
+
+        if (!product) {
+            return res.status(404).send({ status: "error", message: "Product not found" });
+        }
+
+        res.send({ status: 'success', message: 'Product deleted' });
+    }
+    catch (error) {
+        res.status(500).send({ status: "error", message: error.message });
     }
 
-    const productsUpdated = products.filter(prod => prod.id !== pid);
-    const isOk = await saveProducts(productsUpdated);
-    if (!isOk) {
-        return res.status(500).send({ status: "error", message: "Product could not deleted" });
-    }
-    res.send({ status: 'success', message: 'Product deleted' });
 });
 
 export default productsRouter;

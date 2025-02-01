@@ -1,2 +1,4 @@
 clase*/
 node_modules/
+.env
+.REST

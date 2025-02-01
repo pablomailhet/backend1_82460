@@ -1,70 +1,64 @@
-<div class="contenedor">
-
-    <div class="title">
-        <h1>{{title}}</h1>
-    </div>
-
-    <div class="contenedorProducts">
-        <ul id="ulProducts">
-            {{#each products}}
-            <li id="p{{this.id}}">
-                <div>
-                    <h2 id="productTitle">{{this.title}}</h2>
-                    <div>
-                        <p><strong>Descripción:</strong> <span id="productDescription">{{this.description}}</span></p>
-                        <p><strong>Código:</strong> <span id="productCode">{{this.code}}</span></p>
-                        <p><strong>Precio:</strong> $<span id="productPrice">{{this.price}}</span></p>
-                        <p><strong>Stock disponible:</strong> <span id="productStock">{{this.stock}}</span></p>
-                        <p><strong>Categoría:</strong> <span id="productCategory">{{this.category}}</span></p>
-                    </div>
-                    <button type="button" onclick="deleteProduct({{this.id}})">Delete</button>
-                </div>                
-            </li>
+<main id="main" class="container mt-3">
+    <section class="text-center">
+        <h2>{{title}}</h2>
+    </section>
+    <section class="mt-3 mb-5">
+        <div id="divProducts" class="row d-flex flex-row justify-content-center">
+            {{#each data.payload}}
+            <article id="pid_{{this.id}}" class="card cardProducto">
+                <img src="{{this.thumbnails}}" class="card-img-top p-2">
+                <div class="card-body cardBodyProducto">
+                    <h3 class="card-title cardTitleProducto">{{this.title}}</h3>
+                    <p class="card-text cardTextProducto">{{this.description}}</p>
+                    <p class="card-text cardTextProducto">{{this.category}}</p>
+                    <p class="card-text cardTextProducto">${{formatDecimal this.price}}</p>
+                </div>
+                <div class="card-footer">
+                    <input type="button" class="btn btn-danger m-1" value="Eliminar"
+                        onclick="deleteProduct('{{this.id}}')" />
+                </div>
+            </article>
             {{/each}}
-        </ul>
-
-    </div>
-
-    <div>
-        <h2 class="formTitle">Cargar un nuevo producto</h2>
-        <form id="formProduct">
-            <div>
-                <label for="title" class="">Title</label>
-                <input type="text" class="" id="title" required />
+        </div>
+    </section>
+    <section class="mt-4 row justify-content-center">
+        <h2 class="formTitle mb-4 text-center">Create new Product</h2>
+        <form id="formProduct" class="container">
+            <div class="mb-3">
+                <label for="title" class="form-label formLabel">Title</label>
+                <input type="text" class="form-control formControl" id="title" required />
             </div>
-            <div>
-                <label for="description" class="">Description</label>
-                <input type="text" class="" id="description" required />
+            <div class="mb-3">
+                <label for="description" class="form-label formLabel">Description</label>
+                <input type="text" class="form-control formControl" id="description" required />
             </div>
-            <div>
-                <label for="code" class="">Code</label>
-                <input type="text" class="" id="code" required />
+            <div class="mb-3">
+                <label for="code" class="form-label formLabel">Code</label>
+                <input type="text" class="form-control formControl" id="code" required />
             </div>
-            <div>
-                <label for="price" class="">Price</label>
-                <input type="number" class="" id="price" required step="any" />
+            <div class="mb-3">
+                <label for="price" class="form-label formLabel">Price</label>
+                <input type="number" class="form-control formControl" id="price" required step="any" min="1" />
             </div>
-            <div>
-                <label for="stock" class="">stock</label>
-                <input type="number" class="" id="stock" required min="1" max="1000"/>
+            <div class="mb-3">
+                <label for="stock" class="form-label formLabel">Stock</label>
+                <input type="number" class="form-control formControl" id="stock" required min="1" />
             </div>
-            <div>
-                <label for="category" class="">Category</label>
-                <select id="category" name="category">
-                    <option value="categoryA">Category A</option>
-                    <option value="categoryB">Category B</option>
-                    <option value="categoryC">Category C</option>
-                    <option value="categoryD">Category D</option>
-                    <option value="categoryE">Category E</option>
+            <div class="mb-3">
+                <label for="category" class="form-label formLabel">Category</label>
+                <select id="category" name="category" class="form-select formControl">
+                    {{#each data.categories}}
+                    <option value="{{this.value}}">{{this.title}}</option>
+                    {{/each}}
                 </select>
             </div>
-            <div>
-                <button type="submit" class="">Enviar</button>
+            <div class="mb-3 text-center">
+                <button type="submit" class="btn formButton">Create</button>
             </div>
         </form>
-    </div>
+    </section>
 
-</div>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="/js/realTimeProducts.js"></script>
 
-<script src="/socket.io/socket.io.js"></script>
-<script src="/js/realTimeProducts.js"></script>
+</main>

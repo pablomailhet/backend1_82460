@@ -16,10 +16,9 @@ formProduct.addEventListener("submit", (e) => {
         title,
         description,
         code,
-        price: parseFloat(price),
-        stock: parseInt(stock),
-        category,
-        status: true
+        price,
+        stock,
+        category
     };
 
     socket.emit('addProduct', product);
@@ -28,37 +27,62 @@ formProduct.addEventListener("submit", (e) => {
 
 });
 
-const deleteProduct = (id) => {
-    if (id) {
-        socket.emit('deleteProduct', id);
+const deleteProduct = async (id) => {
+
+    try {
+        const result = await Swal.fire({
+            icon: "question",
+            title: "¿Está seguro que desea eliminar el producto?",
+            showCancelButton: true,
+            confirmButtonText: "Sí",
+            cancelButtonText: "No",
+            position: "center",
+            customClass: {
+                confirmButton: 'btn btn-success',
+                cancelButton: 'btn btn-secondary',
+            }
+        });
+        if (result.isConfirmed) {
+            if (id) {
+                socket.emit('deleteProduct', id);
+            }
+        }
     }
+    catch (error) {
+        Swal.fire({
+            icon: "error",
+            text: error.message,
+        });
+    }
+
 };
 
 socket.on("newProduct", product => {
-    const ulProducts = document.getElementById("ulProducts");
-    const liProduct = document.createElement('li');
-    liProduct.id = `p${product.id}`;
-    liProduct.innerHTML = `
-        <div>
-            <h2 id="productTitle">${product.title}</h2>
-            <div>
-                <p><strong>Descripción:</strong> <span id="productDescription">${product.description}</span></p>
-                <p><strong>Código:</strong> <span id="productCode">${product.code}</span></p>
-                <p><strong>Precio:</strong> $<span id="productPrice">${product.price}</span></p>
-                <p><strong>Stock disponible:</strong> <span id="productStock">${product.stock}</span></p>
-                <p><strong>Categoría:</strong> <span id="productCategory">${product.category}</span></p>
-            </div>
-            <button type="button" onclick="deleteProduct(${product.id})">Delete</button>
-        </div>    
+    const divProducts = document.getElementById("divProducts");
+    const article = document.createElement('article');
+    article.id = `pid_${product._id}`;
+    article.className = "card cardProducto";
+    article.innerHTML = `
+        <img src="${product.thumbnails || ""}" class="card-img-top p-2">
+        <div class="card-body cardBodyProducto">
+            <h3 class="card-title cardTitleProducto">${product.title}</h3>
+            <p class="card-text cardTextProducto">${product.description}</p>
+            <p class="card-text cardTextProducto">${product.category}</p>
+            <p class="card-text cardTextProducto">$${product.price}</p>
+        </div>
+        <div class="card-footer">
+            <input type="button" class="btn btn-danger m-1" value="Eliminar" onclick="deleteProduct('${product._id}')" />
+        </div>             
     `;
-    ulProducts.appendChild(liProduct);
+    divProducts.appendChild(article);
 });
 
+
 socket.on("deletedProduct", id => {
-    const ulProducts = document.getElementById('ulProducts');
-    const liProduct = document.getElementById(`p${id}`);
-    if (liProduct) {
-        ulProducts.removeChild(liProduct);
+    const divProducts = document.getElementById('divProducts');
+    const article = document.getElementById(`pid_${id}`);
+    if (article) {
+        divProducts.removeChild(article);
     }
 });
 
