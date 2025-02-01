@@ -12,7 +12,7 @@ viewsRouter.get("/", async (req, res) => {
         const title = "Products";
         res.render("home", { data, title });
     } catch (error) {
-        res.render("home", { data: [], title });
+        res.render("home", { data: [], title: error.message });
     }
 });
 
@@ -24,7 +24,7 @@ viewsRouter.get("/realtimeproducts", async (req, res) => {
         const title = "Real time products";
         res.render("realTimeProducts", { data, title });
     } catch (error) {
-        res.render("realTimeProducts", { data: [], title });
+        res.render("realTimeProducts", { data: [], title: error.message });
     }
 
 });
@@ -38,7 +38,7 @@ viewsRouter.get("/carts/:cid", async (req, res) => {
         const cart = await cartsModel.findById(cid);
 
         if (!cart) {
-            return res.status(404).send({ status: "error", message: "Cart not found" });
+            throw new Error("Cart not found");
         }
 
         const products = cart.products.map(item => {
@@ -64,7 +64,7 @@ viewsRouter.get("/carts/:cid", async (req, res) => {
 
     }
     catch (error) {
-        res.status(500).send({ status: "error", message: error.message });
+        res.render("carts", { title: error.message, products: [], total: 0 });
     }
 
 });

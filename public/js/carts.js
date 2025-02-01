@@ -40,9 +40,9 @@ const removeProductFromCart = async (pid) => {
     try {
         const result = await Swal.fire({
             icon: "question",
-            title: "¿Está seguro que desea quitar el producto del carrito?",
+            title: "Are you sure you want to remove the product from the cart?",
             showCancelButton: true,
-            confirmButtonText: "Sí",
+            confirmButtonText: "Yes",
             cancelButtonText: "No",
             position: "center",
             customClass: {
@@ -73,9 +73,9 @@ const emptyCart = async () => {
 
         const result = await Swal.fire({
             icon: "question",
-            title: "¿Está seguro que desea vaciar el carrito?",
+            title: "Are you sure you want to empty the cart?",
             showCancelButton: true,
-            confirmButtonText: "Sí",
+            confirmButtonText: "Yes",
             cancelButtonText: "No",
             position: "center",
             customClass: {

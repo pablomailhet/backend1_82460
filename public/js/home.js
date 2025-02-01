@@ -63,7 +63,7 @@ const addProductToCart = async (product) => {
 
         Swal.fire({
             icon: "success",
-            text: "Producto agregado al carrito",
+            text: "Product added to cart",
             showConfirmButton: true,
             allowOutsideClick: false,
             allowEscapeKey: false             

@@ -5,13 +5,13 @@ import productModel from "../../models/products.model.js";
 const productsRouter = Router();
 
 const categories = [
-    {value:"Motores Brushless",title:"Motores Brushless"},
-    {value:"ESC",title:"ESC"},
-    {value:"Propellers",title:"Propellers"},
-    {value:"Flight Controllers",title:"Flight Controllers"}
+    { value: "Motores Brushless", title: "Motores Brushless" },
+    { value: "ESC", title: "ESC" },
+    { value: "Propellers", title: "Propellers" },
+    { value: "Flight Controllers", title: "Flight Controllers" }
 ];
 
-const buildPaginationResponse = (result,query,sort) => {
+const buildPaginationResponse = (result, query, sort) => {
     const paginationResponse = {
         status: "success",
         payload: result.docs,
@@ -23,7 +23,7 @@ const buildPaginationResponse = (result,query,sort) => {
         hasNextPage: result.hasNextPage,
         prevLink: result.hasPrevPage ? `/?limit=${result.limit}&page=${result.prevPage}&query=${query}&sort=${sort}` : null,
         nextLink: result.hasNextPage ? `/?limit=${result.limit}&page=${result.nextPage}&query=${query}&sort=${sort}` : null,
-        limit: result.limit, 
+        limit: result.limit,
         query,
         sort,
         categories
@@ -38,14 +38,14 @@ productsRouter.get("/", async (req, res) => {
         let { limit, page, query, sort } = req.query;
         limit = limit > 0 ? limit : 10;
         page = page > 0 ? page : 1;
-        const queryObject = query ? {category:query} : {};
+        const queryObject = query ? { category: query } : {};
         let sortObject = {};
-        if(sort==="asc" || sort==="desc"){
-            sortObject = {price: sort==="asc" ? 1 : -1};
+        if (sort === "asc" || sort === "desc") {
+            sortObject = { price: sort === "asc" ? 1 : -1 };
         }
-        const options = { limit, page, sort:sortObject, lean: true };
+        const options = { limit, page, sort: sortObject, lean: true };
         const result = await productModel.paginate(queryObject, options);
-        res.send(buildPaginationResponse(result,query,sort));
+        res.send(buildPaginationResponse(result, query, sort));
 
     }
     catch (error) {

@@ -71,7 +71,7 @@ socket.on("newProduct", product => {
             <p class="card-text cardTextProducto">$${product.price}</p>
         </div>
         <div class="card-footer">
-            <input type="button" class="btn btn-danger m-1" value="Eliminar" onclick="deleteProduct('${product._id}')" />
+            <input type="button" class="btn btn-danger m-1" value="Delete" onclick="deleteProduct('${product._id}')" />
         </div>             
     `;
     divProducts.appendChild(article);
