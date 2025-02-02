@@ -14,7 +14,7 @@
   cd backend1_82460
   ```
 
-- Instalar dependecias
+- Instalar dependencias npm
   ```
   npm install
   ```
