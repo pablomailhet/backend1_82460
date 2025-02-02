@@ -8,11 +8,12 @@ const viewsRouter = Router();
 
 viewsRouter.get("/", async (req, res) => {
     try {
+        const cid = "6797eef467633af608f624a4";
         const data = await getProducts(req);
         const title = "Products";
-        res.render("home", { data, title });
+        res.render("home", { data, title, cid });
     } catch (error) {
-        res.render("home", { data: [], title: error.message });
+        res.render("home", { data: [], title: error.message, cid });
     }
 });
 
@@ -60,11 +61,11 @@ viewsRouter.get("/carts/:cid", async (req, res) => {
 
         const total = products.reduce((acc, product) => acc + product.subtotal, 0);
 
-        res.render("carts", { title: "Carts", products, total });
+        res.render("carts", { title: "Carts", cid, products, total });
 
     }
     catch (error) {
-        res.render("carts", { title: error.message, products: [], total: 0 });
+        res.render("carts", { title: error.message, cid, products: [], total: 0 });
     }
 
 });

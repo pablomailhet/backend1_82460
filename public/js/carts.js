@@ -1,4 +1,5 @@
-const cid = "6797eef467633af608f624a4";
+const main = document.getElementById("main");
+const cid = main.getAttribute('data-cid');
 
 const handleCatch = (error) => {
     Swal.fire({

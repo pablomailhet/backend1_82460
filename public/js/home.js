@@ -3,6 +3,7 @@ const querySelect = document.getElementById("filterCategory");
 const sortSelect = document.getElementById("orderPrice");
 const limitSelect = document.getElementById("limitSelect");
 
+const cid = main.getAttribute('data-cid');
 const prevPage = main.getAttribute('data-prevPage');
 const nextPage = main.getAttribute('data-nextPage');
 let limit = main.getAttribute('data-limit');
@@ -36,14 +37,13 @@ const setHref = () => {
     window.location.href = href;
 }
 
-const addProductToCart = async (product) => {
+const addProductToCart = async (pid) => {
 
     try {
 
-        const idCart = "6797eef467633af608f624a4";
-        const quantity = document.getElementById(`q_${product}`).value;
+        const quantity = document.getElementById(`q_${pid}`).value;
 
-        const response = await fetch(`http://localhost:8080/api/carts/${idCart}/product/${product}`, {
+        const response = await fetch(`http://localhost:8080/api/carts/${cid}/product/${pid}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
