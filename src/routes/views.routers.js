@@ -6,14 +6,21 @@ import cartsModel from "../models/carts.model.js";
 
 const viewsRouter = Router();
 
+const categories = [
+    { value: "Motores Brushless", title: "Motores Brushless" },
+    { value: "ESC", title: "ESC" },
+    { value: "Propellers", title: "Propellers" },
+    { value: "Flight Controllers", title: "Flight Controllers" }
+];
+
 viewsRouter.get("/", async (req, res) => {
     try {
         const cid = "6797eef467633af608f624a4";
         const data = await getProducts(req);
         const title = "Products";
-        res.render("home", { data, title, cid });
+        res.render("home", { data, title, cid, categories });
     } catch (error) {
-        res.render("home", { data: [], title: error.message, cid });
+        res.render("home", { data: [], title: error.message, cid, categories: [] });
     }
 });
 
@@ -23,9 +30,9 @@ viewsRouter.get("/realtimeproducts", async (req, res) => {
         req.query.limit = 100;
         const data = await getProducts(req);
         const title = "Real time products";
-        res.render("realTimeProducts", { data, title });
+        res.render("realTimeProducts", { data, title, categories });
     } catch (error) {
-        res.render("realTimeProducts", { data: [], title: error.message });
+        res.render("realTimeProducts", { data: [], title: error.message, categories: [] });
     }
 
 });

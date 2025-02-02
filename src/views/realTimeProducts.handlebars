@@ -47,7 +47,7 @@
             <div class="mb-3">
                 <label for="category" class="form-label formLabel">Category</label>
                 <select id="category" name="category" class="form-select formControl">
-                    {{#each data.categories}}
+                    {{#each categories}}
                     <option value="{{this.value}}">{{this.title}}</option>
                     {{/each}}
                 </select>

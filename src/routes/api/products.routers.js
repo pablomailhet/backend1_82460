@@ -4,13 +4,6 @@ import productModel from "../../models/products.model.js";
 
 const productsRouter = Router();
 
-const categories = [
-    { value: "Motores Brushless", title: "Motores Brushless" },
-    { value: "ESC", title: "ESC" },
-    { value: "Propellers", title: "Propellers" },
-    { value: "Flight Controllers", title: "Flight Controllers" }
-];
-
 const buildPaginationResponse = (result, query, sort) => {
     const paginationResponse = {
         status: "success",
@@ -25,8 +18,7 @@ const buildPaginationResponse = (result, query, sort) => {
         nextLink: result.hasNextPage ? `/?limit=${result.limit}&page=${result.nextPage}&query=${query}&sort=${sort}` : null,
         limit: result.limit,
         query,
-        sort,
-        categories
+        sort
     }
     return paginationResponse;
 };

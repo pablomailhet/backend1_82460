@@ -9,7 +9,7 @@
             <h3>Filter by Category</h3>
             <select id="filterCategory" class="form-select form-select-lg">
                 <option value="">All</option>
-                {{#each data.categories}}
+                {{#each categories}}
                 <option value="{{this.value}}">{{this.title}}</option>
                 {{/each}}
             </select>
